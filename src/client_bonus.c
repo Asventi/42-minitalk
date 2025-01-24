@@ -19,7 +19,11 @@
 
 void	handler(int sig)
 {
-	(void)sig;
+	if (sig == SIGUSR2)
+	{
+		ft_printf("Data has been received and processed by the server.\n");
+		exit(EXIT_SUCCESS);
+	}
 }
 
 void	send_len(pid_t pid, size_t len)
@@ -79,5 +83,6 @@ int	main(int c, char **args)
 		return (ft_printf("Invalid PID\n"));
 	send_len(pid, ft_strlen(args[2]));
 	send_mess(pid, args[2]);
+	pause();
 	return (0);
 }

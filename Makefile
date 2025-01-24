@@ -28,10 +28,12 @@ DEPS			=	$(patsubst %.c, $(BUILD_DIR)%.d, $(SRC_SRV))
 
 # ================ROOT================= #
 
-SRC_CL 		=	client.c \
+SRC_CL 			=	client.c
+SRC_CL_BONUS	=	client_bonus.c
 
 
-SRC_SRV		=	server.c \
+SRC_SRV			=	server.c
+SRC_SRV_BONUS	=	server_bonus.c
 
 
 # ==========LIBS / INCLUDES============ #
@@ -87,7 +89,8 @@ else ifeq ($(MODE), optimize)
 else ifeq ($(MODE), full-optimize)
 	CFLAGS += -Ofast
 else ifeq ($(MODE), bonus)
-	SRC := $(SRC_BONUS) $(filter-out $(patsubst %_bonus.c, %.c, $(SRC_BONUS)), $(SRC))
+	SRC_CL := $(SRC_CL_BONUS) $(filter-out $(patsubst %_bonus.c, %.c, $(SRC_CL_BONUS)), $(SRC_CL))
+	SRC_SRV := $(SRC_SRV_BONUS) $(filter-out $(patsubst %_bonus.c, %.c, $(SRC_SRV_BONUS)), $(SRC_SRV))
 else ifneq ($(MODE),)
 	ERROR = MODE
 endif
@@ -146,7 +149,7 @@ force:
 
 .PHONY: norminette
 norminette:
-	@norminette $(addprefix $(SRC_DIR), $(SRC)) $(INCS_DIR)
+	@norminette $(addprefix $(SRC_DIR), $(SRC_CL)) $(addprefix $(SRC_DIR), $(SRC_SRV)) $(INCS_DIR)
 
 -include $(DEPS)
 

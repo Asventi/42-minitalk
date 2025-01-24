@@ -2,7 +2,7 @@
 # Prerequisites
 *.d
 client
-serveur
+server
 # Object files
 *.o
 *.ko

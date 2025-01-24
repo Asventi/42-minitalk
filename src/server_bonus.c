@@ -18,7 +18,8 @@
 
 #include "libft.h"
 
-static void	end_session(uint32_t *len, uint32_t *bit_r, uint8_t **data)
+static void	end_session(pid_t pid, uint32_t *len, uint32_t *bit_r,
+	uint8_t **data)
 {
 	uint32_t	i;
 
@@ -33,6 +34,8 @@ static void	end_session(uint32_t *len, uint32_t *bit_r, uint8_t **data)
 	*bit_r = 0;
 	free(*data);
 	*data = 0;
+	usleep(1);
+	kill(pid, SIGUSR2);
 }
 
 static void	create_data(uint32_t len, uint8_t **data)
@@ -68,7 +71,7 @@ static void	handler(int sig, siginfo_t *info, void *p)
 	usleep(1);
 	kill(info->si_pid, SIGUSR1);
 	if (bit_r == len * 8 + 32)
-		end_session(&len, &bit_r, &data);
+		end_session(info->si_pid, &len, &bit_r, &data);
 }
 
 int	main(void)
